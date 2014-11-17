@@ -1,0 +1,7 @@
+# ignore installed packages
+elpa/
+
+# ignore autosave
+auto-save-list/
+
+*~
