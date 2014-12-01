@@ -1,47 +1,93 @@
-; kdoh emacs config
+;; @kdoh emacs config
 
+;;; init.el
 (require 'package)
+
+; add marmalade and melpa repos what for more packages
+(nconc package-archives '(("melpa-stable" . "http://stable.melpa.org/packages/")
+                          ("marmalade" . "http://marmalade-repo.org/packages/")))
+
+
+(add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+
+; required so we know about le packages
 (package-initialize)
 
-; add marmalade repo what for more packages
-(add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/"))
+; if we want to use-package(s) we better require that
+(require 'use-package)
 
-; hide the toolbar
-(tool-bar-mode -1)
+; custom initializers
+; --------------------------------
+(use-package evil-leader-init)
 
-; hide the welcome screen on startup
-(setq inhibit-startup-message t)
+; package configuration
+; --------------------------------
+
+(use-package whitespace
+  :init
+  (progn
+    (global-whitespace-mode 1)))
 
 ; enable ido mode
-(require 'ido)
-(ido-mode t)
+(use-package ido
+  :init
+  (progn
+    (ido-mode 1)))
 
-(require 'editorconfig)
+(use-package ido-vertical-mode
+  :init
+  (progn
+    (ido-vertical-mode 1)))
 
-; evil leader
-(require 'evil-leader)
-(global-evil-leader-mode)
+(use-package ido-ubiquitous
+  :init
+  (progn
+    (ido-ubiquitous-mode)))
 
-; set the leader key to ","
-(evil-leader/set-leader ",")
-(evil-leader/set-key "w" 'save-buffer)
+(use-package evil
+  :init
+  (progn
+    (evil-mode 1)))
 
-(evil-leader/set-key "q" 'kill-buffer-and-window)
+(use-package rainbow-mode
+  :init
+  (progn
+    (add-hook 'css-mode-hook `(rainbow-mode 1))))
 
-(evil-leader/set-key "v" 'split-window-right)
+(use-package rainbow-delimiters)
 
-(evil-leader/set-key "e" 'eval-buffer)
+(use-package auto-complete-config
+  :init
+  (progn
+    (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+    (ac-config-default)))
 
-; configure evil for vim emulation even doe we're in emacs
-(require 'evil)
-(evil-mode 1)
+(use-package powerline
+  :init
+  (progn
+    (powerline-default-theme)))
 
-; autocomplete
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
+(use-package git-gutter
+  :init
+  (progn
+    (custom-set-variables
+     ;; smaller minor mode indicator
+     `(git-gutter:lighter " GG"))
+    (global-git-gutter-mode 1)
+    (git-gutter:linum-setup)))
 
+
+; other random stuff
+; --------------------------------
 ; don't use tabs
+
 (setq-default indent-tabs-mode nil)
+
 (setq tab-width 4)
+
+(add-hook 'html-mode-hook (setq sgml-basic-offset 4))
+
+; theme
+(load-theme 'kdoh t)
+
