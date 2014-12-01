@@ -1,6 +1,12 @@
 # ignore installed packages
 elpa/
 
+ac-comphist.dat
+
+ido.last
+
+*~
+
 # ignore autosave
 auto-save-list/
 
